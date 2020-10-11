@@ -14,6 +14,10 @@
 (defroutes web-app
   (GET "/hello" []
        (hello-response))
+  (GET "/echo" {{input :input} :params}
+       {:status 200
+        :headers {"Content-Type" "text/plain" }
+        :body (input)})
   (GET "/" []
        (hello-response))
   (ANY "*" []
@@ -21,8 +25,8 @@
 
 (defn -main [& [port]]
   (let [port (Integer. (or port (env :port) 5000))]
-    (jetty/run-jetty (site #'web-app { :port port :join? false }))))
+    (jetty/run-jetty (site #'web-app){:port port :join? false})))
 
 ;; For Interactive development
-;(def server (-main))
-;(.stop server)
+(def server (-main))
+(.stop server)
