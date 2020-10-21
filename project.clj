@@ -6,6 +6,8 @@
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [compojure "1.6.1"]
                  [ring/ring-jetty-adapter "1.7.1"]
+                 [clj-http "3.10.3"]
+                 [cheshire "5.10.0"]
                  [environ "1.1.0"]]
   :min-lein-version "2.0.0"
   :repl-options {:init-ns brian-penguin.web}
