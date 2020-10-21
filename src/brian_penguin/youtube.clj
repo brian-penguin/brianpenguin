@@ -7,7 +7,7 @@
   "https://www.googleapis.com/youtube/v3/playlistItems")
 
 (def default-query-params
-  {:key "AIzaSyBCN062q1670nfbl1SBiQWQyHuE0y7vG1I"
+  {:key "<REGEN A KEY PLEASE>"
    :part "id,contentDetails"
    :accept :json})
 
