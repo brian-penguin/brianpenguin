@@ -1,7 +1,9 @@
 (ns brian-penguin.youtube
   "Youtube library wrapper"
   (:require [clj-http.client :as http]
-            [cheshire.core :as json]))
+            [cheshire.core :as json]
+            [clojure.walk]))
+
 
 (def playlists-url
   "https://www.googleapis.com/youtube/v3/playlistItems")
@@ -62,23 +64,27 @@
               "videoPublishedAt" "2019-05-03T19:29:42Z"}}],
    "pageInfo" {"totalResults" 4, "resultsPerPage" 5}})
 
+(comment
+  (defn string-to-symbol [value]
+    (if (string? value) (keyword value) value))
+
+  (defn symbolify-keys
+    "If you don't have to worry about a nested structure you can just use this!"
+    [response-body]
+    (into {} (for [[k v] response-body] [(string-to-symbol k) v] ))))
+
 (def items
-  (get response-body-example "items"))
+  "clojure.walk/keywordize-keys will recursively change all strings to symbols if they're keys"
+  (map clojure.walk/keywordize-keys (get response-body-example "items")))
 
 (defn video-id-from-item [item]
   (get-in item ["contentDetails" "videoId"]))
 
-(def video-ids
-  (map video-id-from-item items))
-
 (defn video-url [video-id]
   (str "https://www.youtube.com/watch?v=" video-id))
 
-(def video-urls
-  (map video-url video-ids))
-
-
-;(->
-  ;playlist-response
-  ;:body
-  ;(get "items"))
+(defn items-to-urls []
+  (->>
+    items
+    (map video-id-from-item)
+    (map video-url)))
