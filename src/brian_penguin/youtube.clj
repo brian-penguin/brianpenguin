@@ -78,13 +78,13 @@
   (map clojure.walk/keywordize-keys (get response-body-example "items")))
 
 (defn video-id-from-item [item]
-  (get-in item ["contentDetails" "videoId"]))
+  (get-in item [:contentDetails :videoId]))
 
 (defn video-url [video-id]
   (str "https://www.youtube.com/watch?v=" video-id))
 
-(defn items-to-urls []
+(defn items-to-urls [playlist-items]
   (->>
-    items
+    playlist-items
     (map video-id-from-item)
     (map video-url)))
